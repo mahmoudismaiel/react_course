@@ -1,47 +1,52 @@
-import React, { Component } from 'react';
-// import logo from './logo.svg';
+//import React, { Component } from 'react';
+// for using React Hooks to enable State for function-based components
+import React, { useState } from 'react';
 import './App.css';
 import Person from './Person/Person';
 
-class App extends Component {
+//class App extends Component {
+const app = props => {
 
- state = {
+  const [personsState, setPersonsState] =   useState({
+    persons: [
+      { name: 'Rose', age: 35 },
+      { name: 'Roaa', age: 7 },
+      { name: 'Rital', age: 1 }
+    ]
+  });
 
-  persons : [
+  const [otherState,setOtherState] = useState('some other value');
 
-    { name:"Rose", age:35},
-    { name:"Roaa", age:7},
-    { name:"Rital", age:1}
-  ],
-  otherState : "some Other Value"
- }
+  console.log(personsState, otherState);
 
- switchNameHandler = () => {
-  //console.log('was Clicked');
-  //window.alert('was Clicked');
-  // DO NOT USE THIS:  this.state.persons[0].name = "Rose Mohamed";
-  this.setState({persons : [
-
-    { name:"Rose Mohamed", age:35},
-    { name:"Roaa", age:7},
-    { name:"Rital", age:0.75}
-  ]
-});
-
- }
-  render() {
-    return (
-      <div className="App">
-        <h1>Hi I'm a React App</h1>
-        <p> This is really working!!</p>
-        <button onClick={this.switchNameHandler}>switch Person</button>
-        <Person name={this.state.persons[0].name} age={this.state.persons[0].age} />
-        <Person name={this.state.persons[1].name} age={this.state.persons[1].age}> My hobbie: reading</Person>
-        <Person name={this.state.persons[2].name} age={this.state.persons[2].age} />
-      </div>
-    );
-    // return React.createElement('div',{className:'App'},React.createElement('h1',null,'I\'m React App!!!'));
+  const switchNameHandler = () => {
+    //console.log('was Clicked');
+    //window.alert('was Clicked');
+    // DO NOT USE THIS:  this.state.persons[0].name = "Rose Mohamed";
+    setPersonsState({
+      persons: [
+  
+        { name: "Rose Mohamed", age: 35 },
+        { name: "Roaa", age: 7 },
+        { name: "Rital", age: 0.75 }
+      ]
+    });
+  
   }
+
+  return (
+    <div className="App">
+      <h1>Hi I'm a React App</h1>
+      <p> This is really working!!</p>
+      <button onClick={switchNameHandler}>switch Person</button>
+      <Person name={personsState.persons[0].name} age={personsState.persons[0].age} />
+      <Person name={personsState.persons[1].name} age={personsState.persons[1].age}> My hobbie: reading</Person>
+      <Person name={personsState.persons[2].name} age={personsState.persons[2].age} />
+    </div>
+  );
 }
 
-export default App;
+export default app;
+
+
+
