@@ -7,47 +7,57 @@ class App extends Component {
   state = {
 
     persons: [
-      { name: "Rose", age: 35 },
-      { name: "Roaa", age: 7 },
-      { name: "Rital", age: 1 }
+      { id: '432', name: "Rose", age: 35 },
+      { id: '122', name: "Roaa", age: 7 },
+      { id: '1asd', name: "Rital", age: 1 }
     ],
     otherState: "some Other Value",
     buttonName: 'Show Persons',
     showPersons: false
   }
 
-  switchNameHandler = (newName) => {
-    //console.log('was Clicked');
-    //window.alert('was Clicked');
-    // DO NOT USE THIS:  this.state.persons[0].name = "Rose Mohamed";
-    this.setState({
-      persons: [
-        { name: newName, age: 35 },
-        { name: 'Roaa', age: 7 },
-        { name: 'Rital', age: 0.75 }
-      ]
-    })
+
+  nameChangedHandler = (event,id) => {
+    //this arrow function is executed over each element of the array
+    const personIndex = this.state.persons.findIndex(p=>{
+    return p.id === id;
+    });
+
+    //spread the element we need to mutate
+    //old javascript way
+    //const person = Object.assign({},this.state.persons[personIndex]);
+    //Modern ES6 way
+    const person = {
+      ...this.state.persons[personIndex]
+    };
+
+    person.name = event.target.value;
+
+    const newPersons = [...this.state.persons];
+    newPersons[personIndex] = person;
+
+    this.setState({ persons : newPersons})
+        
   }
 
-  nameChangedHandler = (event) => {
-    //console.log('was Clicked');
-    //window.alert('was Clicked');
-    // DO NOT USE THIS:  this.state.persons[0].name = "Rose Mohamed";
-    this.setState({
-      persons: [
+  deletePersonHandler = (personIndex) => {
+    /** here you will delete the Original value of this.state.persons */
+    //const newPersons = this.state.persons;
+    /** here you are copying this.state.persons using spread operator ... */
+    const newPersons = [...this.state.persons];
+    newPersons.splice(personIndex, 1);
+    this.setState({ persons: newPersons })
 
-        { name: 'Rose', age: 35 },
-        { name: event.target.value, age: 7 },
-        { name: 'Rital', age: 0.75 }
-      ]
-    })
   }
 
   togglePersonHandler = () => {
+
+    const doesShow = this.state.showPersons;
     this.setState({
 
-      showPersons: !this.state.showPersons,
-      buttonName : this.state.showPersons ? 'Show Persons': 'Hide persons'
+      // showPersons: !this.state.showPersons,
+      showPersons: !doesShow,
+      buttonName: doesShow ? 'Show Persons' : 'Hide persons'
     })
 
   }
@@ -63,30 +73,34 @@ class App extends Component {
       cursor: 'pointer'
     };
 
+    let persons = null
 
+    if (this.state.showPersons) {
+
+      persons = (
+        <div>
+          {this.state.persons.map((person, index) => {
+            return <Person
+              click={() => this.deletePersonHandler(index)}
+              name={person.name}
+              age={person.age}
+              key={person.id}
+              changed={(event) => this.nameChangedHandler(event,person.id)}
+            />
+          })}
+
+        </div>
+      )
+    }
 
     return (
-      <div className="App">
+      <div className="App" >
         <h1>Hi I'm a React App</h1>
         <p> This is really working!!</p>
         <button
           style={buttonStyle}
           onClick={this.togglePersonHandler}>{this.state.buttonName}</button>
-        {this.state.showPersons ===true ?
-          <div>
-            <Person
-              name={this.state.persons[0].name}
-              age={this.state.persons[0].age} />
-            <Person
-              name={this.state.persons[1].name}
-              age={this.state.persons[1].age}
-              click={this.switchNameHandler.bind(this, 'Rose 2')}
-              changed={this.nameChangedHandler}> My hobbie: reading</Person>
-            <Person
-              name={this.state.persons[2].name}
-              age={this.state.persons[2].age} />
-          </div> : null
-        }
+        {persons}
       </div>
     );
     // return React.createElement('div',{className:'App'},React.createElement('h1',null,'I\'m React App!!!'));
