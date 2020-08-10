@@ -51,7 +51,7 @@ class App extends Component {
   }
 
   togglePersonHandler = () => {
-
+     
     const doesShow = this.state.showPersons;
     this.setState({
 
@@ -65,7 +65,8 @@ class App extends Component {
 
   render() {
     const buttonStyle = {
-      backgroundColor: 'white',
+      backgroundColor: 'green',
+      color: 'white',
       font: 'inherit',
       width: '20%',
       border: '1px solid blue',
@@ -91,12 +92,24 @@ class App extends Component {
 
         </div>
       )
+
+      buttonStyle.backgroundColor = 'red';
     }
 
+    //let classes = ['red', 'bold'].join(' '); //e.g "red bold"
+
+    const classes = [];
+    if(this.state.persons.length <=2){
+      classes.push('red'); //classes = ['red']
+    }
+    if(this.state.persons.length <=1){
+      classes.push('bold'); //classes = ['red', 'bold']
+    }
+     
     return (
       <div className="App" >
         <h1>Hi I'm a React App</h1>
-        <p> This is really working!!</p>
+        <p className={classes.join(' ')}> This is really working!!</p>
         <button
           style={buttonStyle}
           onClick={this.togglePersonHandler}>{this.state.buttonName}</button>
