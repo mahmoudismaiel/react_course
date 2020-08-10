@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import Radium, { StyleRoot } from "radium";
+//StyleRoot is to enable using Media queries
 import './App.css';
 import Person from './Person/Person';
 
@@ -17,10 +19,10 @@ class App extends Component {
   }
 
 
-  nameChangedHandler = (event,id) => {
+  nameChangedHandler = (event, id) => {
     //this arrow function is executed over each element of the array
-    const personIndex = this.state.persons.findIndex(p=>{
-    return p.id === id;
+    const personIndex = this.state.persons.findIndex(p => {
+      return p.id === id;
     });
 
     //spread the element we need to mutate
@@ -36,8 +38,8 @@ class App extends Component {
     const newPersons = [...this.state.persons];
     newPersons[personIndex] = person;
 
-    this.setState({ persons : newPersons})
-        
+    this.setState({ persons: newPersons })
+
   }
 
   deletePersonHandler = (personIndex) => {
@@ -51,7 +53,7 @@ class App extends Component {
   }
 
   togglePersonHandler = () => {
-     
+
     const doesShow = this.state.showPersons;
     this.setState({
 
@@ -71,7 +73,11 @@ class App extends Component {
       width: '20%',
       border: '1px solid blue',
       padding: '8px',
-      cursor: 'pointer'
+      cursor: 'pointer',
+      ':hover': {
+        backgroundColor: 'lightgreen',
+        color: 'black'
+      }
     };
 
     let persons = null
@@ -86,7 +92,7 @@ class App extends Component {
               name={person.name}
               age={person.age}
               key={person.id}
-              changed={(event) => this.nameChangedHandler(event,person.id)}
+              changed={(event) => this.nameChangedHandler(event, person.id)}
             />
           })}
 
@@ -94,19 +100,24 @@ class App extends Component {
       )
 
       buttonStyle.backgroundColor = 'red';
+      buttonStyle[':hover'] = {
+        backgroundColor: 'salmon',
+        color: 'black'
+      }
     }
 
     //let classes = ['red', 'bold'].join(' '); //e.g "red bold"
 
     const classes = [];
-    if(this.state.persons.length <=2){
+    if (this.state.persons.length <= 2) {
       classes.push('red'); //classes = ['red']
     }
-    if(this.state.persons.length <=1){
+    if (this.state.persons.length <= 1) {
       classes.push('bold'); //classes = ['red', 'bold']
     }
-     
+
     return (
+      <StyleRoot>
       <div className="App" >
         <h1>Hi I'm a React App</h1>
         <p className={classes.join(' ')}> This is really working!!</p>
@@ -115,9 +126,10 @@ class App extends Component {
           onClick={this.togglePersonHandler}>{this.state.buttonName}</button>
         {persons}
       </div>
+      </StyleRoot>
     );
     // return React.createElement('div',{className:'App'},React.createElement('h1',null,'I\'m React App!!!'));
   }
 }
 
-export default App;
+export default Radium(App);
